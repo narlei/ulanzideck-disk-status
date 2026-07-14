@@ -1,0 +1,40 @@
+{
+  "Name": "Disk Status",
+  "Version": "1.0.0",
+  "Author": "narlei",
+  "Description": "Watch your disk space in your desk.",
+  "Category": "tools",
+  "Icon": "icon",
+  "URL": "https://github.com/narlei/ulanzideck-disk-status",
+  "Actions": [
+    {
+      "Name": "Disk Status Action",
+      "UUID": "com.narlei.diskstatus.action",
+      "Icon": "icon",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "pi/index.html",
+      "States": [
+        {
+          "Image": "icon"
+        }
+      ],
+      "Tooltip": "Disk Status"
+    }
+  ],
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinVersion": "10.15"
+    },
+    {
+      "Platform": "windows",
+      "MinVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinVersion": "1.0.0"
+  },
+  "CodePath": "app.js"
+}
