@@ -1,40 +1,45 @@
 {
-  "Name": "Disk Status",
-  "Version": "1.0.0",
   "Author": "narlei",
-  "Description": "Watch your disk space in your desk.",
-  "Category": "tools",
-  "Icon": "icon",
-  "URL": "https://github.com/narlei/ulanzideck-disk-status",
+  "Name": "Disk Status",
+  "Description": "Watch free and used space on your disks and drives — including external SSDs/HDDs — right on your Ulanzi Deck button. Pick which volume each button watches from the Property Inspector.",
+  "Icon": "resources/icon.png",
+  "Version": "1.0.1",
+  "Category": "Disk Status",
+  "CategoryIcon": "resources/icon.png",
+  "CodePath": "plugin/app.js",
+  "Type": "JavaScript",
+  "PrivateAPI": true,
+  "SupportedInMultiActions": false,
+  "UUID": "com.narlei.diskstatus.plugin",
   "Actions": [
     {
-      "Name": "Disk Status Action",
-      "UUID": "com.narlei.diskstatus.action",
-      "Icon": "icon",
-      "Controllers": [
-        "Keypad"
-      ],
-      "PropertyInspectorPath": "pi/index.html",
+      "Name": "Disk Status",
+      "Tooltip": "Shows used/free space for the selected disk or volume. Click to force a refresh.",
+      "Icon": "resources/icon.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "UUID": "com.narlei.diskstatus.plugin.status",
       "States": [
         {
-          "Image": "icon"
+          "Image": "resources/icon.png"
         }
       ],
-      "Tooltip": "Disk Status"
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Keypad"
+      ]
     }
   ],
   "OS": [
     {
       "Platform": "mac",
-      "MinVersion": "10.15"
+      "MinimumVersion": "10.15"
     },
     {
       "Platform": "windows",
-      "MinVersion": "10"
+      "MinimumVersion": "10"
     }
   ],
   "Software": {
-    "MinVersion": "1.0.0"
-  },
-  "CodePath": "app.js"
+    "MinVersion": "3.0.11"
+  }
 }

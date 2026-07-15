@@ -1,9 +1,16 @@
 {
   "cover": "resources/cover.png",
-  "screenshots": [],
-  "longDescription": "",
+  "screenshots": [
+    "resources/cover.png",
+    "resources/banner1.png",
+    "resources/banner2.png"
+  ],
+  "longDescription": "Disk Status shows how full a disk or volume is directly on your Ulanzi Deck button — the amount of space in use, how much is still free, and a color-coded bar (green/yellow/orange/red) that fills as the disk gets fuller. Each button has its own dropdown listing every mounted volume, including external SSDs/HDDs, so you can watch several disks at once across different buttons. Values refresh on their own and the moment you click.",
   "deviceTypes": [
     "deck"
   ],
-  "tags": []
+  "tags": [
+    "office",
+    "tools"
+  ]
 }

@@ -1,0 +1,15 @@
+{
+  "name": "disk-status",
+  "version": "1.0.1",
+  "description": "Ulanzi Deck plugin that displays disk/volume usage (used, free, total) on a button, with a Property Inspector picker for which storage device to monitor.",
+  "author": "narlei",
+  "license": "MIT",
+  "main": "plugin/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node plugin/app.js"
+  },
+  "dependencies": {
+    "ws": "8.21.0"
+  }
+}

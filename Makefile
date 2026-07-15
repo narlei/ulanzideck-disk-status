@@ -4,6 +4,7 @@ INSTALL_DIR   := $(INSTALL_BASE)/$(PLUGIN_ID)
 DIST_DIR      := dist
 ZIP           := $(DIST_DIR)/$(PLUGIN_ID).zip
 APP_NAME      := Ulanzi Studio
+APP_PROC      := UlanziDeck
 
 .PHONY: help package install restart clean bump_major bump_minor bump_patch
 
@@ -16,11 +17,18 @@ help:
 	@echo "  make bump_patch  - Bump patch version"
 
 package: clean
+	@echo "→ Reinstalling production deps in $(PLUGIN_ID)..."
+	@rm -rf "$(PLUGIN_ID)/node_modules"
+	@cd "$(PLUGIN_ID)" && npm install --omit=dev --silent
 	@mkdir -p $(DIST_DIR)
 	@zip -r "$(ZIP)" "$(PLUGIN_ID)" -x "*.DS_Store"
 	@echo "✅ $(ZIP) created."
 
 install:
+	@if [ ! -d "$(PLUGIN_ID)/node_modules" ]; then \
+		echo "→ Installing deps..."; \
+		cd "$(PLUGIN_ID)" && npm install --omit=dev --silent; \
+	fi
 	@echo "→ Installing $(PLUGIN_ID) to $(INSTALL_DIR)..."
 	@mkdir -p "$(INSTALL_BASE)"
 	@rm -rf "$(INSTALL_DIR)"
@@ -29,7 +37,12 @@ install:
 
 restart:
 	@echo "→ Restarting $(APP_NAME)..."
-	@killall "$(APP_NAME)" 2>/dev/null || true
+	@killall "$(APP_PROC)" 2>/dev/null || true
+	@for i in 1 2 3 4 5; do \
+		pgrep -x "$(APP_PROC)" >/dev/null 2>&1 || break; \
+		sleep 1; \
+	done
+	@pkill -x "$(APP_PROC)" 2>/dev/null || true
 	@sleep 1
 	@open -a "$(APP_NAME)" || echo "⚠️ Could not open $(APP_NAME). Please start it manually."
 
@@ -38,16 +51,12 @@ clean:
 
 bump_major bump_minor bump_patch:
 	@TYPE=$$(echo $@ | sed s/bump_//); \
-	cd $(PLUGIN_ID) && npm version $$TYPE --no-git-tag-version --silent 2>/dev/null || echo "No package.json found inside plugin folder."; \
+	cd $(PLUGIN_ID) && npm version $$TYPE --no-git-tag-version --silent; \
+	NEW_VER=$$(node -p "require('./package.json').version"); \
 	node -e "\
 		const fs = require('fs'); \
-		const path = '$(PLUGIN_ID)/manifest.json'; \
-		const m = JSON.parse(fs.readFileSync(path)); \
-		const parts = m.Version.split('.'); \
-		if ('$$TYPE' === 'major') { parts[0] = parseInt(parts[0]) + 1; parts[1] = 0; parts[2] = 0; } \
-		else if ('$$TYPE' === 'minor') { parts[1] = parseInt(parts[1]) + 1; parts[2] = 0; } \
-		else { parts[2] = parseInt(parts[2]) + 1; } \
-		m.Version = parts.join('.'); \
-		fs.writeFileSync(path, JSON.stringify(m, null, 2) + '\n'); \
-		console.log('Bumped manifest.json to ' + m.Version); \
-	"
+		const m = JSON.parse(fs.readFileSync('manifest.json')); \
+		m.Version = '$$NEW_VER'; \
+		fs.writeFileSync('manifest.json', JSON.stringify(m, null, 2) + '\n'); \
+	"; \
+	echo "✓ Version bumped to $$NEW_VER (package.json + manifest.json)"

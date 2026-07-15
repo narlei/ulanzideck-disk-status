@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+  <title>Disk Status</title>
+  <link rel="stylesheet" href="../libs/css/uspi.css">
+  <style>
+    .panel { padding: 8px 12px; font-size: 12px; line-height: 1.5; }
+    .panel p { margin: 0 0 8px; opacity: 0.85; }
+    .panel .muted { opacity: 0.6; font-size: 11px; }
+    .refresh-row { display: flex; justify-content: flex-end; margin: 4px 10px 10px; }
+    .refresh-row button { width: auto; padding: 0 14px; height: 26px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="udpi-wrapper hidden uspi-wrapper">
+    <form id="property-inspector">
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize="diskLabel">Disk / Volume</div>
+        <select class="uspi-item-value" name="diskId" id="diskId">
+          <option value="" data-localize="loadingOption">Loading disks…</option>
+        </select>
+      </div>
+
+      <div class="refresh-row">
+        <button type="button" id="refreshBtn" data-localize="refreshBtn">Refresh list</button>
+      </div>
+
+      <div class="panel">
+        <p class="muted" data-localize="hint">Includes your internal drive and any mounted external SSD/HDD. Plug in a drive, then click "Refresh list" if it isn't shown yet.</p>
+        <p class="muted" data-localize="refreshHint">The button refreshes automatically every 5 minutes. Click it any time to update instantly.</p>
+      </div>
+    </form>
+  </div>
+
+  <script src="../libs/js/constants.js"></script>
+  <script src="../libs/js/eventEmitter.js"></script>
+  <script src="../libs/js/timers.js"></script>
+  <script src="../libs/js/utils.js"></script>
+  <script src="../libs/js/ulanziApi.js"></script>
+  <script src="./inspector.js"></script>
+</body>
+</html>
