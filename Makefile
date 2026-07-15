@@ -24,15 +24,17 @@ package: clean
 	@zip -r "$(ZIP)" "$(PLUGIN_ID)" -x "*.DS_Store"
 	@echo "✅ $(ZIP) created."
 
+# Copy (not symlink) the plugin into UlanziDeck, bundling node_modules — this
+# mirrors exactly how the Community Store ZIP is installed (self-contained, no
+# dependency on this repo's location or an external volume staying mounted).
 install:
 	@if [ ! -d "$(PLUGIN_ID)/node_modules" ]; then \
 		echo "→ Installing deps..."; \
 		cd "$(PLUGIN_ID)" && npm install --omit=dev --silent; \
 	fi
 	@echo "→ Installing $(PLUGIN_ID) to $(INSTALL_DIR)..."
-	@mkdir -p "$(INSTALL_BASE)"
-	@rm -rf "$(INSTALL_DIR)"
-	@ln -s "$(CURDIR)/$(PLUGIN_ID)" "$(INSTALL_DIR)"
+	@mkdir -p "$(INSTALL_DIR)"
+	@rsync -a --delete --exclude=".DS_Store" --exclude="*.log" "$(PLUGIN_ID)/" "$(INSTALL_DIR)/"
 	@$(MAKE) restart
 
 restart:

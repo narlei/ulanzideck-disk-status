@@ -45,12 +45,25 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # UlanziDeck ships its own Node but does NOT install plugin dependencies,
+      # so the runtime deps (e.g. ws) must be bundled inside the ZIP. node_modules
+      # is gitignored, so install it here at build time before packaging.
+      - name: Setup Node
+        if: steps.check.outputs.exists == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Build plugin zip(s)
         if: steps.check.outputs.exists == 'false'
         run: |
           found=0
           for dir in *.ulanziPlugin; do
             [ -d "$dir" ] || continue
+            if [ -f "$dir/package.json" ]; then
+              echo "Installing production deps for $dir"
+              (cd "$dir" && npm install --omit=dev --no-audit --no-fund)
+            fi
             echo "Packaging $dir"
             zip -r "${dir}.zip" "$dir" -x "*.DS_Store"
             found=1
@@ -59,6 +72,11 @@ jobs:
             echo "No .ulanziPlugin directory found at the repository root" >&2
             exit 1
           fi
+          echo "--- ZIP contents (sanity check for node_modules) ---"
+          unzip -l *.ulanziPlugin.zip | grep -E "node_modules/ws/package.json" || {
+            echo "ERROR: ws dependency missing from ZIP — install failed" >&2
+            exit 1
+          }
 
       - name: Create GitHub Release
         if: steps.check.outputs.exists == 'false'
