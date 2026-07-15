@@ -3,7 +3,7 @@
   "Name": "Disk Status",
   "Description": "Watch free and used space on your disks and drives — including external SSDs/HDDs — right on your Ulanzi Deck button. Pick which volume each button watches from the Property Inspector.",
   "Icon": "resources/icon.png",
-  "Version": "1.0.1",
+  "Version": "1.0.2",
   "Category": "Disk Status",
   "CategoryIcon": "resources/icon.png",
   "CodePath": "plugin/app.js",
